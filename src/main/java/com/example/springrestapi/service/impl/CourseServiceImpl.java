@@ -1,6 +1,8 @@
 package com.example.springrestapi.service.impl;
 
+import com.example.springrestapi.dto.CourseRequest;
 import com.example.springrestapi.dto.CourseResponse;
+import com.example.springrestapi.model.Course;
 import com.example.springrestapi.respository.CourseRespository;
 import com.example.springrestapi.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +56,16 @@ public class CourseServiceImpl implements CourseService {
                 .findFirst().orElse(null);
     }
 
-
+    @Override
+    public CourseRequest createCourse(CourseRequest courseRequest) {
+        courseRespository.createCourse(Course.builder()
+                        .id(UUID.randomUUID())
+                        .code("b-11")
+                        .title(courseRequest.title())
+                        .description(courseRequest.description())
+                        .price(courseRequest.price())
+                        .status(false)
+                .build());
+        return courseRequest;
+    }
 }

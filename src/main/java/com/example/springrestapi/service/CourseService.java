@@ -11,4 +11,5 @@ public interface CourseService {
     List<CourseResponse> filterCourseByStatus(Boolean status);
     List<CourseResponse> filterCourseByStatusAndTitle(Boolean status, String title);
     CourseResponse getCourseByCode(String code);
+    CourseRequest createCourse(CourseRequest courseRequest);
 }

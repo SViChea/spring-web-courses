@@ -111,4 +111,9 @@ public class CourseRespository {
                 .build());
 
     }
+
+    public Course createCourse(Course course){
+        courses.add(course);
+        return course;
+    }
 }

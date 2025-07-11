@@ -1,8 +1,11 @@
 package com.example.springrestapi.controller;
 
+import com.example.springrestapi.dto.CourseRequest;
 import com.example.springrestapi.dto.CourseResponse;
+import com.example.springrestapi.model.Course;
 import com.example.springrestapi.service.impl.CourseServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,5 +30,11 @@ public class CourseController {
     @GetMapping("/{id}")
     public CourseResponse getCourseById(@PathVariable String id) {
         return courseService.getCourseByCode(id);
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public CourseRequest createCourse(@RequestBody CourseRequest courseRequest) {
+        return courseService.createCourse(courseRequest);
     }
 }
