@@ -18,13 +18,7 @@ public class CourseController {
 
     @GetMapping()
     public List<CourseResponse> getAllCourses(@RequestParam(required = false) Boolean status, @RequestParam(required = false) String title) {
-        if (status != null && title != null) {
-            return courseService.filterCourseByStatusAndTitle(status, title);
-        }else if (status != null){
-            return courseService.filterCourseByStatus(status);
-        }else{
-            return courseService.getAllCourses();
-        }
+        return courseService.getCourses(status, title);
     }
 
     @GetMapping("/{id}")
@@ -36,5 +30,11 @@ public class CourseController {
     @ResponseStatus(HttpStatus.CREATED)
     public CourseRequest createCourse(@RequestBody CourseRequest courseRequest) {
         return courseService.createCourse(courseRequest);
+    }
+
+    @DeleteMapping("/{code}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCourseById(@PathVariable String code) {
+        courseService.deleteCourseByCode(code);
     }
 }

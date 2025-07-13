@@ -6,7 +6,9 @@ import com.example.springrestapi.model.Course;
 import com.example.springrestapi.respository.CourseRespository;
 import com.example.springrestapi.service.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,18 +37,23 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseResponse> filterCourseByStatus(Boolean status) {
-        return getAllCourses().stream()
-                .filter(course ->
-                        course.status().equals(status)).toList();
-    }
-
-    @Override
-    public List<CourseResponse> filterCourseByStatusAndTitle(Boolean status, String title) {
-        return getAllCourses().stream()
-                .filter(course ->
-                        course.status().equals(status))
-                .filter(courses -> courses.title().toLowerCase().startsWith(title)).toList();
+    public List<CourseResponse> getCourses(Boolean status, String title) {
+        listCourses = new ArrayList<>();
+        if (status != null & title != null) {
+            return getAllCourses().stream()
+                    .filter(course ->
+                            course.status().equals(status))
+                    .filter(courses -> courses.title().toLowerCase().startsWith(title)).toList();
+        }else if(status != null){
+            return getAllCourses().stream()
+                    .filter(course ->
+                            course.status().equals(status)).toList();
+        }else if(title != null){
+            return getAllCourses().stream()
+                    .filter(courses -> courses.title().toLowerCase().startsWith(title)).toList();
+        }else{
+            return getAllCourses();
+        }
     }
 
     @Override
@@ -58,14 +65,31 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseRequest createCourse(CourseRequest courseRequest) {
-        courseRespository.createCourse(Course.builder()
+        boolean isExist = courseRespository.getCourses().stream()
+                .anyMatch(course -> course.getCode()
+                        .equalsIgnoreCase(courseRequest.code()));
+
+        if (isExist) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Course already exists");
+        }
+
+        courseRespository.getCourses().add(Course.builder()
                         .id(UUID.randomUUID())
-                        .code("b-11")
+                        .code(courseRequest.code())
                         .title(courseRequest.title())
                         .description(courseRequest.description())
                         .price(courseRequest.price())
                         .status(false)
                 .build());
         return courseRequest;
+    }
+
+    @Override
+    public void deleteCourseByCode(String code) {
+        boolean isExist = courseRespository.getCourses().removeIf(course->  course.getCode().equalsIgnoreCase(code));
+
+        if (!isExist) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course doesn't exists");
+        }
     }
 }

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface CourseService {
     List<CourseResponse> getAllCourses();
-    List<CourseResponse> filterCourseByStatus(Boolean status);
-    List<CourseResponse> filterCourseByStatusAndTitle(Boolean status, String title);
+    List<CourseResponse> getCourses(Boolean status, String title);
     CourseResponse getCourseByCode(String code);
     CourseRequest createCourse(CourseRequest courseRequest);
+    void deleteCourseByCode(String code);
 }
