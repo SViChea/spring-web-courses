@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record ErrorResponse<T>(
         String message,
         Integer status,
-        LocalDateTime timestamp
+        LocalDateTime timestamp,
+        T details
 ) {
 }

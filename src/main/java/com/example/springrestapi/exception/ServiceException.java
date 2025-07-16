@@ -17,7 +17,7 @@ import java.util.Map;
 public class ServiceException {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<ErrorResponse> handleServiceException(ResponseStatusException e) {
-        ErrorResponse errorResponse = new ErrorResponse(e.getReason(), e.getStatusCode().value(),  LocalDateTime.now());
+        ErrorResponse errorResponse = new ErrorResponse(e.getReason(), e.getStatusCode().value(),  LocalDateTime.now(), e.getReason());
         return ResponseEntity.status(errorResponse.status()).body(errorResponse);
     }
 }

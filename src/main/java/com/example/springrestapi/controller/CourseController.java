@@ -4,6 +4,7 @@ import com.example.springrestapi.dto.CourseRequest;
 import com.example.springrestapi.dto.CourseResponse;
 import com.example.springrestapi.model.Course;
 import com.example.springrestapi.service.impl.CourseServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class CourseController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public CourseRequest createCourse(@RequestBody CourseRequest courseRequest) {
+    public CourseRequest createCourse(@Valid @RequestBody CourseRequest courseRequest) {
         return courseService.createCourse(courseRequest);
     }
 
